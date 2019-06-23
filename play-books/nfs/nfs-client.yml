@@ -1,0 +1,24 @@
+  - hosts: client 
+    become: yes
+    vars:
+      nfs_ip: "{{ hostvars['ansible-node2']['ansible_default_ipv4']['address'] }}"
+      nfs_hostname: "{{ hostvars['ansible-node2']['ansible_hostname'] }}"
+    vars_files:
+      - /srini/play-books/nfs/user-list.txt
+    tasks:
+      - name: configure hostsfile
+        template:
+          src: /srini/play-books/nfs/templates/etc.hosts.j2
+          dest: /etc/hosts.nfslab
+      - name: get file status
+        stat:
+          path: /opt/user-agreement.txt
+        register: filestat
+      - name: debug info
+        debug:
+          var: filestat
+      - name: create users
+        user:
+          name: "{{ item }}"
+        when:  filestat.stat.exists
+        loop: "{{ users }}"

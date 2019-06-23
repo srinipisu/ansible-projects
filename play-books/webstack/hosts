@@ -1,0 +1,5 @@
+[all]
+ansible-node1
+
+[webservers]
+ansible-node1

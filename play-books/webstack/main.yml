@@ -1,0 +1,11 @@
+---
+
+- name: apply common configuration
+  hosts: all
+  roles:
+    - common
+
+- name: install and configure apache webservers
+  hosts: webservers
+  roles:
+    - web
